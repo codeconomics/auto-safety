@@ -660,6 +660,19 @@ accidents_with_count$make_word <- accidents_with_count$Make_Word
 accidents_with_count$Make_Word <- NULL
 accidents_with_count$model_word <- accidents_with_count$Model_Word
 accidents_with_count$Model_Word <- NULL
-accidents_with_count_matched <- preprocess_fars(cond_death)
+accidents_with_count_matched <- preprocess_fars(accidents_with_count)
+
+accidents_with_count_matched$NewReportingDateQuarterly <- paste(accidents_with_count_matched$year,'q',accidents_with_count_matched$quarter,sep='')
+
+accidents_with_count_matched$ModelName_N <- accidents_with_count_matched$MatchedModelName
+accidents_with_count_matched$BrandName_N <- accidents_with_count_matched$MatchedBrandName
+accidents_with_count_matched$MatchedBrandName <- NULL
+accidents_with_count_matched$MatchedModelName <- NULL
+accidents_with_count_matched$ModelYear <- accidents_with_count_matched$mod_year
+accidents_with_count_matched$mod_year <- NULL
+
+merged_table_mm.3 <- read.csv( 'fars/3waymerged_withmm_May11.csv')
+merged_table_mm.acc_with_count <- merge(merged_table_mm.3, accidents_with_count_matched, all.y = T)
+write.csv(merged_table_mm.acc_with_count, 'fars/4waymerged_acc_with_ve_total.csv', row.names = F)
 
 
